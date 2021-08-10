@@ -1,6 +1,6 @@
 # QtMagicOASystem
 
-🎉新一代OA，基于ONEByteOA项目，数据以二进制形式存储在本地。
+🎉新一代OA，基于ONEByteOA项目，数据以二进制形式存储在本地，由于ONEByteOA项目存在诸多内存读写问题，严重影响QtMagicOASystem开发，该项目可能会搁置。
 
 ![1](https://img.shields.io/github/license/CSTHenry/QtMagicOASystem) ![2](https://img.shields.io/github/v/release/CSTHenry/QtMagicOASystem?include_prereleases) ![3](https://img.shields.io/github/downloads/CSTHenry/QtMagicOASystem/total)
 
