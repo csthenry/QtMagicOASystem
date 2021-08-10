@@ -1,7 +1,12 @@
 #ifndef _ATTENDANCE_H_
 #define _ATTENDANCE_H_
+
+#include "userAccount.h"
 #include <cstring>
 #include <iostream>
+#include <iomanip>
+#include <fstream>
+#include <ctime>
 
 using namespace std;
 //developer:GitHub_CSTHenry(zhengke@bytecho.net)
@@ -14,7 +19,7 @@ public:
     char Uid[12] = "\0";
     attendance *next = nullptr;
 
-    bool cheakUid(char *id)//IDÆ¥Åä·µ»Øtrue
+    bool cheakUid(char *id)//IDåŒ¹é…è¿”å›true
     {
         if (!strcmp(Uid, id))
             return true;
@@ -33,19 +38,19 @@ public:
         return backTime;
     }
 
-    void takeAttendance(char *Time, char *simple, bool todayMethod)//ĞèÒªµ±Ç°Ê±¼äºÍÇ©µ½·½Ê½£¨Ç©µ½½Ó¿Ú£©
+    void takeAttendance(char *Time, char *simple, bool todayMethod)//éœ€è¦å½“å‰æ—¶é—´å’Œç­¾åˆ°æ–¹å¼ï¼ˆç­¾åˆ°æ¥å£ï¼‰
     {
         strcpy(attendanceTime, Time);
         strcpy(simpleTime, simple);
         method = todayMethod;
     }
 
-    void takeBack(char *Time)//Ç©ÍË½Ó¿Ú
+    void takeBack(char *Time)//ç­¾é€€æ¥å£
     {
         strcpy(backTime, Time);
     }
 
-    void printInf(char *today)//×ÛºÏ´òÓ¡Ç©µ½¡¢Ç©ÍË×´Ì¬£¬ÓÃÓÚ¸öÈË²Ëµ¥£¬ÇÒ×Ô¶¯Çå³ı¹ıÆÚ¼ÇÂ¼
+    void printInf(char *today)//ç»¼åˆæ‰“å°ç­¾åˆ°ã€ç­¾é€€çŠ¶æ€ï¼Œç”¨äºä¸ªäººèœå•ï¼Œä¸”è‡ªåŠ¨æ¸…é™¤è¿‡æœŸè®°å½•
     {
         if (!strcmp(simpleTime, today)) {
             printAttendance();
@@ -53,50 +58,83 @@ public:
                 cout << endl;
                 printBack();
             } else
-                cout << "[Î´Ç©ÍË]" << endl;
+                cout << "[æœªç­¾é€€]" << endl;
         } else {
             deleteYesterday();
-            cout << "UID£º" << Uid << "[Î´Ç©µ½]" << endl;
+            cout << "UIDï¼š" << Uid << "[æœªç­¾åˆ°]" << endl;
+        }
+    }
+    string getQt(char *today)
+    {
+        if (!strcmp(simpleTime, today) && strlen(backTime)) {
+            return "å·²ç­¾é€€";
+        } else {
+            return "æœªç­¾é€€";
+        }
+    }
+    string getQd(char *today)
+    {
+        if (!strcmp(simpleTime, today)) {
+            return "å·²ç­¾åˆ°";
+        } else {
+            deleteYesterday();
+            return "æœªç­¾åˆ°";
+        }
+    }
+    string getQdTime(char *today)
+    {
+        if (!strcmp(simpleTime, today)) {
+            return string(attendanceTime);
+        } else {
+            return "NaN";
+        }
+    }
+    string getQtTime(char *today)
+    {
+        if (!strcmp(simpleTime, today) && strlen(backTime)) {
+            return string(backTime);
+        } else {
+            return "NaN";
         }
     }
 
-    void printAdminInf(char *today)//¼òÂÔ´òÓ¡¿¼ÇÚ×´Ì¬£¬ÓÃÓÚ¹ÜÀí²Ëµ¥£¬ÔÚÊä³öÓÃ»§ĞÅÏ¢ºóµ÷ÓÃ£¬ÇÒ×Ô¶¯Çå³ı¹ıÆÚ¼ÇÂ¼
+    void printAdminInf(char *today)//ç®€ç•¥æ‰“å°è€ƒå‹¤çŠ¶æ€ï¼Œç”¨äºç®¡ç†èœå•ï¼Œåœ¨è¾“å‡ºç”¨æˆ·ä¿¡æ¯åè°ƒç”¨ï¼Œä¸”è‡ªåŠ¨æ¸…é™¤è¿‡æœŸè®°å½•
     {
         if (!strcmp(simpleTime, today)) {
-            cout << "[ÒÑÇ©µ½]" << "Ç©µ½Ê±¼ä£º" << attendanceTime << " ";
+            cout << "[å·²ç­¾åˆ°]" << "ç­¾åˆ°æ—¶é—´ï¼š" << attendanceTime << " ";
         } else {
-            deleteYesterday();//Çå³ı¹ıÆÚÇ©µ½¼ÇÂ¼
-            cout << "[µ±ÌìÎ´Ç©µ½]" << endl;
+            deleteYesterday();//æ¸…é™¤è¿‡æœŸç­¾åˆ°è®°å½•
+            cout << "[å½“å¤©æœªç­¾åˆ°]" << endl;
             return;
         }
         if (method) {
             if (strlen(backTime))
-                cout << "Ç©ÍËÊ±¼ä£º" << backTime;
+                cout << "ç­¾é€€æ—¶é—´ï¼š" << backTime;
             else
-                cout << "[Î´Ç©ÍË]";
+                cout << "[æœªç­¾é€€]";
         }
-        cout << " Ç©µ½·½Ê½£º" << getMethod() << endl;
+        cout << " ç­¾åˆ°æ–¹å¼ï¼š" << getMethod() << endl;
     }
 
-    void expAdminInf(char *today, userAccount *head, int flag)//¼òÂÔ´òÓ¡¿¼ÇÚ×´Ì¬£¬ÓÃÓÚ¹ÜÀí²Ëµ¥£¬ÔÚÊä³öÓÃ»§ĞÅÏ¢ºóµ÷ÓÃ£¬ÇÒ×Ô¶¯Çå³ı¹ıÆÚ¼ÇÂ¼
+    void expAdminInf(char *today, userAccount *head, int flag)//ç®€ç•¥æ‰“å°è€ƒå‹¤çŠ¶æ€ï¼Œç”¨äºç®¡ç†èœå•ï¼Œåœ¨è¾“å‡ºç”¨æˆ·ä¿¡æ¯åè°ƒç”¨ï¼Œä¸”è‡ªåŠ¨æ¸…é™¤è¿‡æœŸè®°å½•
     {
         ofstream expFile("expAttendance.csv", ios::out | ios::app);
         if (flag == 1) {
-            expFile << "¿¼ÇÚ±íµ¼³öÈÕÆÚ£º," << today << "\n";
-            expFile << "UID,ĞÕÃû,Ö°Î»,Ç©µ½×´Ì¬,Ç©µ½Ê±¼ä,Ç©ÍË×´Ì¬,Ç©ÍËÊ±¼ä,Ç©µ½·½Ê½" << endl;
+            expFile << "è€ƒå‹¤è¡¨å¯¼å‡ºæ—¥æœŸï¼š," << today << "\n";
+            expFile << "UID,å§“å,èŒä½,ç­¾åˆ°çŠ¶æ€,ç­¾åˆ°æ—¶é—´,ç­¾é€€çŠ¶æ€,ç­¾é€€æ—¶é—´,ç­¾åˆ°æ–¹å¼" << endl;
         }
         expFile << "[" << head->uid << "]," << head->uName() << "," << head->search_Situation() << ",";
         if (!strcmp(simpleTime, today)) {
-            expFile << "[ÒÑÇ©µ½]," << attendanceTime << ",";
+            expFile << "[å·²ç­¾åˆ°]," << attendanceTime << ",";
         } else {
-            expFile << "[µ±ÌìÎ´Ç©µ½],NULL,NULL,NULL,NULL" << "\n";
+            expFile << "[å½“å¤©æœªç­¾åˆ°],NULL,NULL,NULL,NULL" << "\n";
             return;
         }
         if (method) {
             if (strlen(backTime))
-                expFile << "[ÒÑÇ©ÍË]," << backTime << ",";
+                expFile << "[å·²ç­¾é€€]," << backTime << ",";
             else
-                expFile << "[Î´Ç©ÍË],NULL,";
+                expFile << "[æœªç­¾é€€],NULL,";
         } else {
             expFile << "NULL,NULL,";
         }
@@ -104,19 +142,19 @@ public:
     }
 
     void printAttendance() {
-        cout << "UID£º" << Uid << endl << "[ÒÑÇ©µ½]"
-             << " Ç©µ½·½Ê½£º" << getMethod() << endl;
-        cout << "Ç©µ½Ê±¼ä£º" << attendanceTime << endl;
+        cout << "UIDï¼š" << Uid << endl << "[å·²ç­¾åˆ°]"
+             << " ç­¾åˆ°æ–¹å¼ï¼š" << getMethod() << endl;
+        cout << "ç­¾åˆ°æ—¶é—´ï¼š" << attendanceTime << endl;
     }
 
     void printBack() {
-        cout << "[ÒÑÇ©ÍË]" << endl;
-        cout << "Ç©ÍËÊ±¼ä£º" << backTime << endl;
+        cout << "[å·²ç­¾é€€]" << endl;
+        cout << "ç­¾é€€æ—¶é—´ï¼š" << backTime << endl;
     }
 
-    [[nodiscard]] string getMethod() const;
+    string getMethod() const;
 
-    void deleteYesterday()//ÓÃ»§simpleTime²»ÏàÍ¬Ê±µ÷ÓÃ
+    void deleteYesterday()//ç”¨æˆ·simpleTimeä¸ç›¸åŒæ—¶è°ƒç”¨
     {
         method = false;
         for (int i = 0; attendanceTime[i]; i++)
@@ -126,9 +164,22 @@ public:
     }
 
 private://developer:GitHub_CSTHenry(zhengke@bytecho.net)
-    bool method = false;//falseÎª²¹Ç©£¬trueÎª×ÔĞĞÇ©µ½
+    bool method = false;//falseä¸ºè¡¥ç­¾ï¼Œtrueä¸ºè‡ªè¡Œç­¾åˆ°
     char attendanceTime[50] = "\0";
     char backTime[50] = "\0";
-    char simpleTime[25] = "\0";//½öÏÔÊ¾ÈÕÆÚ£¬²»ÏÔÊ¾¾ßÌåÊ±¼ä£¬ÓÃÓÚÅĞ¶Ïµ±ÌìÊÇ·ñÇ©µ½
+    char simpleTime[25] = "\0";//ä»…æ˜¾ç¤ºæ—¥æœŸï¼Œä¸æ˜¾ç¤ºå…·ä½“æ—¶é—´ï¼Œç”¨äºåˆ¤æ–­å½“å¤©æ˜¯å¦ç­¾åˆ°
 };
+
+char *nowTime();
+char *simpleTime();
+attendance *searchUserAttendance(attendance *head, char *uid);
+attendance *userToData(userAccount *head);
+attendance *searchUserPtr(attendance *ahead, char *id);
+void userAttendance(attendance *target);
+void userBack(attendance *target);
+void printAttendance(userAccount *head, attendance *ahead);
+void addAttendance(const char *newUid, attendance *last);
+void adminAttendance(attendance *target);
+void deleteAttendance(attendance *ahead, char *uid);
+
 #endif

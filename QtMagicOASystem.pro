@@ -16,13 +16,26 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    approveFunc.cpp \
+    attendanceFunc.cpp \
+    form.cpp \
     main.cpp \
+    mainFunc.cpp \
+    mainsrc.cpp \
+    userDataFunc.cpp \
     widget.cpp
 
 HEADERS += \
+    approve.h \
+    approveList.h \
+    attendance.h \
+    form.h \
+    function.h \
+    userAccount.h \
     widget.h
 
 FORMS += \
+    form.ui \
     widget.ui
 
 TRANSLATIONS += \

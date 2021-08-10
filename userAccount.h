@@ -2,6 +2,7 @@
 #define _USERACCOUNT_H_
 #include <cstring>
 #include <iostream>
+
 using namespace std;
 //developer:GitHub_CSTHenry(zhengke@bytecho.net)
 class userAccount {
@@ -10,25 +11,25 @@ public:
     userAccount *next = nullptr;
 
     void welcomeUser() {
-        cout << "»¶Ó­ " << search_Situation() << " " << name << " (UID: " << uid << ")£º" << endl;
+        cout << "æ¬¢è¿Ž " << search_Situation() << " " << name << " (UID: " << uid << ")ï¼š" << endl;
     }
 
     static void saveUserData(userAccount *head);
 
-    [[nodiscard]] int getGroup() const {
+    int getGroup() const {
         return group;
     }
 
     static userAccount *loadUserData(userAccount *head);
 
-    void signUp(char *I, char *N, char *P, int G) {
+    void signUp(const char *I, const char *N, const char *P, int G) {
         strcpy(uid, I);
         strcpy(name, N);
         strcpy(password, P);
         group = G;
         }
 
-    bool logIn(char *pass) {
+    bool logIn(const char *pass) {
         bool key;
         !strcmp(pass, password) ? key = true : key = false;
         if (key)
@@ -36,7 +37,7 @@ public:
         return false;
     }
 
-    bool cheakUid(char *id)//ÓÐÖØ¸´ID·µ»ØÕæ
+    bool cheakUid(const char *id)//æœ‰é‡å¤IDè¿”å›žçœŸ
     {
         bool key;
         !strcmp(uid, id) ? key = true : key = false;
@@ -51,14 +52,14 @@ public:
         void print_userInf();
         void print_userInfSimple();
 
-    [[nodiscard]] string search_Situation() const {
+    string search_Situation() const {
         switch (group) {
             case 1:
-                return "¹ÜÀíÔ±";
+                return "ç®¡ç†å‘˜";
             case 2:
-                return "¿ª·¢Õß";
+                return "å¼€å‘è€…";
             case 3:
-                return "ÆÕÍ¨ÓÃ»§";
+                return "æ™®é€šç”¨æˆ·";
             default:
                     return "error,code:searchSituation Not return.";
             }

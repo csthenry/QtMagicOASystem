@@ -1,4 +1,4 @@
-#ifndef _APPROVELIST_H_
+ï»¿#ifndef _APPROVELIST_H_
 #define _APPROVELIST_H_
 
 #include <cstring>
@@ -12,8 +12,8 @@ public:
     static approveList *loadList(approveList *aphead);
 
     approveList *next = nullptr;
-    int listNum = 0;//ÉóÅúÁ÷³Ì±àºÅ
-    bool isContent = false;//ÊÇ·ñ¿ªÆôÉêÇëÄÚÈİÌîĞ´£¿
+    int listNum = 0;//å®¡æ‰¹æµç¨‹ç¼–å·
+    bool isContent = false;//æ˜¯å¦å¼€å¯ç”³è¯·å†…å®¹å¡«å†™ï¼Ÿ
     char *reListTips() {
         return listTips;
     }
@@ -31,8 +31,8 @@ public:
     }
 
 private:
-    char listTips[100] = "\0";//ÉêÇëÌáÊ¾
-    char listTitle[21] = "\0";//Á÷³ÌÃû
+    char listTips[100] = "\0";//ç”³è¯·æç¤º
+    char listTitle[21] = "\0";//æµç¨‹å
 };
 
 #endif

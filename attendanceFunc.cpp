@@ -1,28 +1,25 @@
 #include "attendance.h"
-#include <iostream>
-#include <fstream>
-#include <ctime>
-
-using namespace std;
 
 //developer:GitHub_CSTHenry(zhengke@bytecho.net)
+
+
 char *simpleTime();
 
 char *nowTime() {
     static char nowTime[50];
     time_t now = time(nullptr);
-    strftime(nowTime, 50, "%YÄê%mÔÂ%dÈÕ %H:%M:%S", localtime(&now));
+    strftime(nowTime, 50, "%Yå¹´%mæœˆ%dæ—¥ %H:%M:%S", localtime(&now));
     return nowTime;
 }
 
 char *simpleTime() {
     static char simpleTime[25];
     time_t now = time(nullptr);
-    strftime(simpleTime, 50, "%YÄê%mÔÂ%dÈÕ", localtime(&now));
+    strftime(simpleTime, 50, "%Yå¹´%mæœˆ%dæ—¥", localtime(&now));
     return simpleTime;
 }
 
-attendance *searchUserAttendance(attendance *head, char *uid)//ÕÒµ½ÓÃ»§Ç©µ½Êı¾İ·µ»ØÖ¸Õë£¬·ñÔò·µ»ØNullptr
+attendance *searchUserAttendance(attendance *head, char *uid)//æ‰¾åˆ°ç”¨æˆ·ç­¾åˆ°æ•°æ®è¿”å›æŒ‡é’ˆï¼Œå¦åˆ™è¿”å›Nullptr
 {
     while (head) {
         if (head->cheakUid(uid))
@@ -32,13 +29,13 @@ attendance *searchUserAttendance(attendance *head, char *uid)//ÕÒµ½ÓÃ»§Ç©µ½Êı¾İ·
     return head;
 }
 
-attendance *userToData(userAccount *head)//½«µ±Ç°ËùÓĞÓÃ»§IDĞ´ÈëÇ©µ½Êı¾İ±í£¬ÓÃÓÚ³ÌĞò³õÊ¼»¯
+attendance *userToData(userAccount *head)//å°†å½“å‰æ‰€æœ‰ç”¨æˆ·IDå†™å…¥ç­¾åˆ°æ•°æ®è¡¨ï¼Œç”¨äºç¨‹åºåˆå§‹åŒ–
 {
     auto *ahead = new attendance();
     attendance *nextPtr;
     nextPtr = nullptr;
     auto ptr = ahead;
-    while (head)//½«ÓÃ»§Êı¾İ±íÖĞµÄËùÓĞUIDĞ´Èë¿¼ÇÚÊı¾İ±íUID£¬²¢¹¹½¨¿¼ÇÚÊı¾İ±í³¤Á´
+    while (head)//å°†ç”¨æˆ·æ•°æ®è¡¨ä¸­çš„æ‰€æœ‰UIDå†™å…¥è€ƒå‹¤æ•°æ®è¡¨UIDï¼Œå¹¶æ„å»ºè€ƒå‹¤æ•°æ®è¡¨é•¿é“¾
     {
         nextPtr = new attendance();
         strcpy(ahead->Uid, head->uid);
@@ -48,7 +45,7 @@ attendance *userToData(userAccount *head)//½«µ±Ç°ËùÓĞÓÃ»§IDĞ´ÈëÇ©µ½Êı¾İ±í£¬ÓÃÓÚ³
     }
     return ptr;
 }//developer:GitHub_CSTHenry(zhengke@bytecho.net)
-void attendance::savaAttendance(attendance *ahead)//½«¿¼ÇÚÁ´±í±£´æÖÁ¶ş½øÖÆ,ÔÚ¶Ô¿¼ÇÚ½øĞĞ²Ù×÷ºó£¬¾ùÒªÖ´ĞĞ´Ëº¯Êı
+void attendance::savaAttendance(attendance *ahead)//å°†è€ƒå‹¤é“¾è¡¨ä¿å­˜è‡³äºŒè¿›åˆ¶,åœ¨å¯¹è€ƒå‹¤è¿›è¡Œæ“ä½œåï¼Œå‡è¦æ‰§è¡Œæ­¤å‡½æ•°
 {
     ofstream openUserFile("./src/attendanceData.dat", ios::binary | ios::out);//./src/attendanceData.dat
     if (!openUserFile.fail()) {
@@ -68,7 +65,7 @@ void attendance::savaAttendance(attendance *ahead)//½«¿¼ÇÚÁ´±í±£´æÖÁ¶ş½øÖÆ,ÔÚ¶Ô¿
     openUserFile.close();
 }
 
-[[maybe_unused]] attendance *searchUserPtr(attendance *ahead, char *id)//²éÕÒ¿¼ÇÚÊı¾İÖĞµÄÏàÓ¦UID£¬²¢·µ»Ø¶ÔÓ¦Ö¸Õë£¬ÎŞ´ËUID·µ»ØNullptr
+attendance *searchUserPtr(attendance *ahead, char *id)//æŸ¥æ‰¾è€ƒå‹¤æ•°æ®ä¸­çš„ç›¸åº”UIDï¼Œå¹¶è¿”å›å¯¹åº”æŒ‡é’ˆï¼Œæ— æ­¤UIDè¿”å›Nullptr
 {
     while (ahead) {
         if (ahead->cheakUid(id))
@@ -77,7 +74,7 @@ void attendance::savaAttendance(attendance *ahead)//½«¿¼ÇÚÁ´±í±£´æÖÁ¶ş½øÖÆ,ÔÚ¶Ô¿
     }
     return ahead;
 }//developer:GitHub_CSTHenry(zhengke@bytecho.net)
-attendance *attendance::loadData(attendance *ahead)//ÔØÈë¿¼ÇÚÊı¾İ£¬´¦ÀíÍ·Ö¸Õë£¬·µ»ØÎ²Ö¸Õë£¬ÔØÈëÊ§°Ü·µ»ØNullptr
+attendance *attendance::loadData(attendance *ahead)//è½½å…¥è€ƒå‹¤æ•°æ®ï¼Œå¤„ç†å¤´æŒ‡é’ˆï¼Œè¿”å›å°¾æŒ‡é’ˆï¼Œè½½å…¥å¤±è´¥è¿”å›Nullptr
 {
     int flag = 0;
     attendance *temp = ahead;
@@ -91,7 +88,7 @@ attendance *attendance::loadData(attendance *ahead)//ÔØÈë¿¼ÇÚÊı¾İ£¬´¦ÀíÍ·Ö¸Õë£¬·
             loadUserFile.read((char *) temp->attendanceTime, sizeof(temp->attendanceTime));
             loadUserFile.read((char *) temp->backTime, sizeof(temp->backTime));
             loadUserFile.read((char *) &temp->simpleTime, sizeof(temp->simpleTime));
-            if (!strlen(temp->Uid)) //½â¾öloadUserFile.eof()»á¶à²Ù×÷Ò»´ÎµÄÎÊÌâ
+            if (!strlen(temp->Uid)) //è§£å†³loadUserFile.eof()ä¼šå¤šæ“ä½œä¸€æ¬¡çš„é—®é¢˜
             {
                 flag = 1;
                 last->next = nullptr;
@@ -116,56 +113,56 @@ attendance *attendance::loadData(attendance *ahead)//ÔØÈë¿¼ÇÚÊı¾İ£¬´¦ÀíÍ·Ö¸Õë£¬·
 
 string attendance::getMethod() const {
     if (!method)
-        return "¹ÜÀíÔ±²¹Ç©";
-    return "×ÔĞĞÇ©µ½";
+        return "ç®¡ç†å‘˜è¡¥ç­¾";
+    return "è‡ªè¡Œç­¾åˆ°";
 }
 
 /*
-bool cheakToday(attendance* target)//ÅĞ¶Ïµ±ÌìÓÃ»§ÊÇ·ñÇ©µ½£¬´«ÈëÄ¿±êÓÃ»§¿¼ÇÚÁ´±íÖ¸Õë
+bool cheakToday(attendance* target)//åˆ¤æ–­å½“å¤©ç”¨æˆ·æ˜¯å¦ç­¾åˆ°ï¼Œä¼ å…¥ç›®æ ‡ç”¨æˆ·è€ƒå‹¤é“¾è¡¨æŒ‡é’ˆ
 {
 
 }*/
-void userAttendance(attendance *target)//Ç©µ½º¯Êı
+void userAttendance(attendance *target)//ç­¾åˆ°å‡½æ•°
 {
     target->takeAttendance(nowTime(), simpleTime(), true);
 }
 
-void userBack(attendance *target)//Ç©ÍËº¯Êı
+void userBack(attendance *target)//ç­¾é€€å‡½æ•°
 {
     target->takeBack(nowTime());
 }
 
-void adminAttendance(attendance *target)//²¹Ç©º¯Êı
+void adminAttendance(attendance *target)//è¡¥ç­¾å‡½æ•°
 {
     target->takeAttendance(nowTime(), simpleTime(), false);
 }
 
-void printAttendance(userAccount *head, attendance *ahead)//ÓÃÓÚ¹ÜÀíÔ±²Ëµ¥05
+void printAttendance(userAccount *head, attendance *ahead)//ç”¨äºç®¡ç†å‘˜èœå•05
 {
-    cout << left << setw(11) << "[ÓÃ»§UID]" << setw(10) << "[ĞÕÃû]" << setw(10) << "[Ö°Î»]" << "[¿¼ÇÚĞÅÏ¢]" << endl;
+    cout << left << setw(11) << "[ç”¨æˆ·UID]" << setw(10) << "[å§“å]" << setw(10) << "[èŒä½]" << "[è€ƒå‹¤ä¿¡æ¯]" << endl;
     cout << endl;
     while (ahead && head) {
-        cout << "[" << head->uid << "] " << left << setw(10) << head->uName() << setw(10) << head->search_Situation() << "Ç©µ½×´Ì¬->";
+        cout << "[" << head->uid << "] " << left << setw(10) << head->uName() << setw(10) << head->search_Situation() << "ç­¾åˆ°çŠ¶æ€->";
         ahead->printAdminInf(simpleTime());
         head = head->next;
         ahead = ahead->next;
     }
 }
 
-void addAttendance(char *newUid, attendance *last)//×¢²áĞÂÓÃ»§ºó£¬Îñ±Øµ÷ÓÃ´Ëº¯Êı£¬ÇÒµ÷ÓÃ´Ëº¯ÊıºóĞèµ÷ÓÃsaveAttendance()
+void addAttendance(const char *newUid, attendance *last)//æ³¨å†Œæ–°ç”¨æˆ·åï¼ŒåŠ¡å¿…è°ƒç”¨æ­¤å‡½æ•°ï¼Œä¸”è°ƒç”¨æ­¤å‡½æ•°åéœ€è°ƒç”¨saveAttendance()
 {
     auto *nextPtr = new attendance();
     strcpy(nextPtr->Uid, newUid);
     last->next = nextPtr;
 }//developer:GitHub_CSTHenry(zhengke@bytecho.net)
-void deleteAttendance(attendance *ahead, char *uid)//×¢ÏúÓÃ»§ºó£¬µ÷ÓÃ´Ëº¯Êı£¬ÇÒµ÷ÓÃ´Ëº¯ÊıºóĞèµ÷ÓÃsaveAttendance()
+void deleteAttendance(attendance *ahead, char *uid)//æ³¨é”€ç”¨æˆ·åï¼Œè°ƒç”¨æ­¤å‡½æ•°ï¼Œä¸”è°ƒç”¨æ­¤å‡½æ•°åéœ€è°ƒç”¨saveAttendance()
 {
     attendance *temp = ahead;
-    while (ahead)//¶¨Î»Ä¿±êUID
+    while (ahead)//å®šä½ç›®æ ‡UID
     {
         if (ahead->cheakUid(uid))
             break;
-        temp = ahead;//¼ÇÂ¼Ç°Ò»½ÚµÄµØÖ·
+        temp = ahead;//è®°å½•å‰ä¸€èŠ‚çš„åœ°å€
         ahead = ahead->next;
     }
     temp->next = ahead->next;

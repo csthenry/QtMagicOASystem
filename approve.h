@@ -1,8 +1,12 @@
-#ifndef _APPROVE_H_
+ï»¿#ifndef _APPROVE_H_
 #define _APPROVE_H_
 
+#include "approveList.h"
+#include "userAccount.h"
 #include <cstring>
 #include <iostream>
+#include <fstream>
+#include <iomanip>
 
 using namespace std;
 //developer:GitHub_CSTHenry(zhengke@bytecho.net)
@@ -11,8 +15,8 @@ public:
     char Uid[12] = "\0", name[10] = "\0";
     int listNum = 0;
     approve *next = nullptr;
-    bool statu = false;//ÉóÅú×´Ì¬£ºfÉóºËÖĞ£¬tÉóºËÍê³É£¬ÓÃÓÚ¸öÈË²Ëµ¥
-    bool flag = false;//ÉóºË½á¹û£ºtÍ¨¹ı£¬f¾Ü¾ø£¬ÓÃÓÚ¸öÈË²Ëµ¥
+    bool statu = false;//å®¡æ‰¹çŠ¶æ€ï¼šfå®¡æ ¸ä¸­ï¼Œtå®¡æ ¸å®Œæˆï¼Œç”¨äºä¸ªäººèœå•
+    bool flag = false;//å®¡æ ¸ç»“æœï¼šté€šè¿‡ï¼Œfæ‹’ç»ï¼Œç”¨äºä¸ªäººèœå•
     static approve *loadList(approve *uahead);
 
     bool getUserapp(char *uid, int num) {
@@ -22,7 +26,7 @@ public:
             return false;
     }
 
-    char *reContent()//»ñÈ¡ÉêÇëÄÚÈİ£¬¿ÉÄÜÎª\0£¬È¡¾öÓÚÉóÅúÁ÷³Ì
+    char *reContent()//è·å–ç”³è¯·å†…å®¹ï¼Œå¯èƒ½ä¸º\0ï¼Œå–å†³äºå®¡æ‰¹æµç¨‹
     {
         return content;
     }
@@ -55,28 +59,63 @@ public:
         strcpy(reply, re);
     }
 
-    void cheakStatu() const//»ñÈ¡ÉóºË×´Ì¬
+    void cheakStatu() const//è·å–å®¡æ ¸çŠ¶æ€
     {
         if (statu) {
             if (flag)
-                cout << "Í¨ ¹ı" << endl;
+                cout << "é€š è¿‡" << endl;
             else
-                cout << "²»Í¨¹ı" << endl;
+                cout << "ä¸é€šè¿‡" << endl;
         } else
-            cout << "ÉóºËÖĞ" << endl;
+            cout << "å®¡æ ¸ä¸­" << endl;
     }
 
     [[maybe_unused]] void printStatu() {
-        cout << "ÏîÄ¿£º" << title << " ÉóºË×´Ì¬£º";
+        cout << "é¡¹ç›®ï¼š" << title << " å®¡æ ¸çŠ¶æ€ï¼š";
         cheakStatu();
         cout << endl;
     }
 
 private:
-    char content[200] = "\0";//ÉêÇëÄÚÈİ£¨¿ÉÑ¡£©
-    char title[21] = "\0";//Á÷³ÌÃû
-    char apply[200] = "\0";//ÉêÇëÀíÓÉ
-    char reply[101] = "\0";//ÉóºËÒâ¼û
+    char content[200] = "\0";//ç”³è¯·å†…å®¹ï¼ˆå¯é€‰ï¼‰
+    char title[21] = "\0";//æµç¨‹å
+    char apply[200] = "\0";//ç”³è¯·ç†ç”±
+    char reply[101] = "\0";//å®¡æ ¸æ„è§
 };
+approveList *appSearch(approveList *aphead, int num);
+
+void addList(approveList *aphead, char *title, char *tips, bool content);
+
+void editApprove(approve *uahead, char *uid);
+
+void saveApprove(approve *uahead);
+
+void saveList(approveList *aphead);
+
+bool deleteList(approveList *aphead, int listNumber);
+
+bool getList(approve *uahead);
+
+bool adminApprove(approve *target, userAccount *head);
+
+bool getUserApprove(userAccount *point, approve *uahead);
+
+void addApprove(approve *uahead, approveList *aphead, char *uid, char *uName, char *apply, char *content);
+
+void addSimpleApp(approve *uahead, char *uid, char *uName, char *apply, char *content);
+
+void addStaticApp(approve *uahead, userAccount *target, const int listNum, const char *title, const char *apply,
+                  const char *content);
+void saveApprove(approve *uahead);
+
+bool getList(approve *uahead);
+
+bool adminApprove(approve *target, userAccount *head);
+
+bool getUserApprove(userAccount *point, approve *uahead);
+
+void editApprove(approve *uahead, char *uid);
+
+void editList(approveList *aphead);
 
 #endif
